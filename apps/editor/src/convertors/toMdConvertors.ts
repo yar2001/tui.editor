@@ -83,12 +83,12 @@ const nodes: ToMdNodeConvertorMap = {
   orderedList(state, node) {
     const start = node.attrs.order || 1;
     const maxWidth = String(start + node.childCount - 1).length;
-    const space = state.repeat('  ', maxWidth + 2);
+    const space = state.repeat(' ', maxWidth + 2);
 
     state.convertList(node, space, (index: number) => {
-      const numStr = String(start + index);
+      const orderNum = String(start + index);
 
-      return `${state.repeat(' ', maxWidth - numStr.length)}${numStr}. `;
+      return `${state.repeat(' ', maxWidth - orderNum.length)}${orderNum}. `;
     });
   },
 

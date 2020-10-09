@@ -84,6 +84,7 @@ describe('Convertor', () => {
         * foo
         * bar
           * qux
+            * quux
         * baz
     	`;
 
@@ -95,6 +96,8 @@ describe('Convertor', () => {
         1. foo
         2. bar
         3. baz
+           1. qux
+              1. quux
     	`;
 
       assertConverting(markdown, markdown);
@@ -106,14 +109,14 @@ describe('Convertor', () => {
         > bar
         >> baz
         > > qux
-        > >> quxx
+        > >> quux
       `;
       const expected = source`
         > foo
         > bar
         > > baz
         > > qux
-        > > > quxx
+        > > > quux
       `;
 
       assertConverting(markdown, expected);
@@ -238,7 +241,9 @@ describe('Convertor', () => {
         * [x] bar
         
         1. [x] foo
+           1. [x] baz
         2. [ ] bar
+           1. [ ] qux
       `;
 
       assertConverting(markdown, markdown);
@@ -250,14 +255,16 @@ describe('Convertor', () => {
         >   * baz
         > * bar
         >> 1. qux
-        > > 2. quxx 
+        > > 2. quux 
+        >>>    1. quuz
       `;
       const expected = source`
         > * foo
         >   * baz
         > * bar
         > > 1. qux
-        > > 2. quxx 
+        > > 2. quux
+        > > > 1. quuz
       `;
 
       assertConverting(markdown, expected);
