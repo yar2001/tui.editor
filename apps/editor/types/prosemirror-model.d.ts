@@ -15,5 +15,6 @@ declare module 'prosemirror-model' {
         index?: number
       ) => boolean | void | null | undefined
     ): void;
+    withText?(text: string): Model.Node;
   }
 }

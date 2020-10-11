@@ -1,4 +1,4 @@
-import { Node, Mark } from 'prosemirror-model';
+import { ProsemirrorNode as Node, Mark } from 'prosemirror-model';
 
 import { WwNodeType, WwMarkType } from '@t/wysiwyg';
 import { ToMdNodeConvertorMap, ToMdMarkConvertorMap, FirstDelimFn } from '@t/convertor';
@@ -116,10 +116,10 @@ export default class ToMdConvertorState {
   }
 
   convertBlock(node: Node, parent: Node, index: number) {
-    const nodeType = this.nodes[node.type.name as WwNodeType];
+    const convertor = this.nodes[node.type.name as WwNodeType];
 
-    if (nodeType) {
-      nodeType(this, node, parent, index);
+    if (convertor) {
+      convertor(this, node, parent, index);
     }
   }
 
@@ -168,9 +168,7 @@ export default class ToMdConvertorState {
         trailing = trail;
 
         if (lead || trail) {
-          // @ts-ignore
-          // type is not defined for "withText" in prosemirror-model
-          node = inner ? node.withText(inner) : null;
+          node = inner ? node.withText!(inner) : null;
 
           if (!node) {
             marks = active;

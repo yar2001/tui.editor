@@ -106,23 +106,27 @@ export const toWwConvertors: ToWwConvertorMap = {
     state.addNode(state.schema.nodes.thematicBreak);
   },
 
-  strong(state, _, { entering }) {
+  strong(state, node, { entering }) {
     const { strong } = state.schema.marks;
 
-    if (entering) {
-      state.openMark(strong.create());
-    } else {
-      state.closeMark(strong);
+    if (node.parent!.type !== 'strong') {
+      if (entering) {
+        state.openMark(strong.create());
+      } else {
+        state.closeMark(strong);
+      }
     }
   },
 
-  emph(state, _, { entering }) {
+  emph(state, node, { entering }) {
     const { emph } = state.schema.marks;
 
-    if (entering) {
-      state.openMark(emph.create());
-    } else {
-      state.closeMark(emph);
+    if (node.parent!.type !== 'emph') {
+      if (entering) {
+        state.openMark(emph.create());
+      } else {
+        state.closeMark(emph);
+      }
     }
   },
 
@@ -215,13 +219,15 @@ export const toWwConvertors: ToWwConvertorMap = {
     }
   },
 
-  strike(state, _, { entering }) {
+  strike(state, node, { entering }) {
     const { strike } = state.schema.marks;
 
-    if (entering) {
-      state.openMark(strike.create());
-    } else {
-      state.closeMark(strike);
+    if (node.parent!.type !== 'strike') {
+      if (entering) {
+        state.openMark(strike.create());
+      } else {
+        state.closeMark(strike);
+      }
     }
   },
 

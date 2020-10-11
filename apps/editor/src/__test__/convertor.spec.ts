@@ -23,20 +23,20 @@ describe('Convertor', () => {
   let convertor: Convertor;
   let schema: Schema;
 
+  function assertConverting(markdown: string, expected: string) {
+    const mdNode = parser.parse(markdown);
+    const wwNode = convertor.toWysiwygModel(mdNode);
+    const result = convertor.toMarkdownText(wwNode!);
+
+    expect(result).toBe(expected);
+  }
+
   beforeEach(() => {
     schema = createSchema();
     convertor = new Convertor(schema);
   });
 
   describe('convert between markdown and wysiwyg node to', () => {
-    function assertConverting(markdown: string, expected: string) {
-      const mdNode = parser.parse(markdown);
-      const wwNode = convertor.toWysiwygModel(mdNode);
-      const result = convertor.toMarkdownText(wwNode!);
-
-      expect(result).toBe(expected);
-    }
-
     it('paragraph', () => {
       const markdown = 'foo';
 
@@ -271,5 +271,26 @@ describe('Convertor', () => {
     });
 
     // @TODO test hardBreak
+  });
+
+  it('should merge same sytax in emphasis syntax after converting to markdown', () => {
+    const markdown = source`
+        **foo **bar** baz**
+        *foo *bar* baz*
+        __foo __bar__ baz__
+        _foo _bar_ baz_
+        ~~foo ~~bar~~ baz~~
+        **foo **ba _baz_ r** baz**
+      `;
+    const expected = source`
+        **foo bar baz**
+        *foo bar baz*
+        **foo bar baz**
+        *foo bar baz*
+        ~~foo bar baz~~
+        **foo ba *baz* r baz**
+      `;
+
+    assertConverting(markdown, expected);
   });
 });
